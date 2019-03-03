@@ -89,6 +89,23 @@ defmodule Servy.Handler do
     %{ conv | status: 200, resp_body: "Bears, Lions, Tigers" }
   end
 
+  def route(%{ method: "GET", path: "/about" } = conv) do
+    file_path = 
+      Path.expand("../../pages", __DIR__)
+      |> Path.join("about.html")
+
+    case File.read(file_path) do
+      {:ok, content} -> 
+        %{ conv | status: 200, resp_body: content }
+ 
+      {:error, :enoent = reason} ->
+        %{ conv | status: 404, resp_body: "File error: #{:file.format_error(reason)}" }
+      
+      {:error, reason} ->
+        %{ conv | status: 500, resp_body: "File error: #{:file.format_error(reason)}" }
+    end
+  end
+
   def route(%{ path: path } = conv) do
     %{ conv | status: 404, resp_body: "No #{path} here!" }
   end
@@ -177,6 +194,16 @@ IO.puts response
 
 request = """
 GET /wildlife HTTP/1.1
+Host: example.com
+User-Agent: ExampleBrowser/1.0
+Accept: */*
+"""
+
+response = Servy.Handler.handle(request)
+IO.puts response
+
+request = """
+GET /about HTTP/1.1
 Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*

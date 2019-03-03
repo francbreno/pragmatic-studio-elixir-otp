@@ -102,3 +102,22 @@
     - Use the `Regex` module to work with regular expressions
   - Using the `Logger` module
     - Tip: To log data structures like Maps, it's necessary to convert it first into a binary (?: need to confirm)
+
+## 9. Serve Static Files
+
+Reading files
+
+- `File` module
+  - `read` function
+    - success: `{:ok, binary}`
+    - error: `{:error, reason}`
+- Pattern matching to check the response
+  - Using a `case` expression
+  - Or function clauses
+- Paths
+  - Using the `Path` module
+    - `expand` function
+      - To read a file on a path relative to another path
+  - `__DIR__`: Absolute path of the directory of the current file
+    - `join`: joina list of paths into a new path usign the proper file separator
+  - 
