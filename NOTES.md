@@ -81,4 +81,17 @@
      - `"users/" <> id = "users/4357"` -> id = 4357
      - But:
        - pet_type <> "/" <> id = "dogs/99" -> Error: *the left argument of <> operator inside a match should be always a literal binary as its size can't be verified*
-     - 
+
+## 8. Rewrite Paths and Track 404s
+
+  Defining specialized functions to transform requests
+  and even responses: Plugins
+
+  - Matching map keys:
+    - `%{ age: 18 } = %{ name: "John Doe", age: 18, city: "New York" }`
+      - It matches even if the left side doesn't have all keys
+      - But cannot match if a key on the left side doesn't exists on the right side
+      - Obviously, it doesn't matches inexistent keys on the right side
+    - It's also possible to bind values on the right side
+      - `%{ age: age } = %{ name: "John Doe", age: 18, city: "New York" }`
+    - 
