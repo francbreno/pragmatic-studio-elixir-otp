@@ -44,3 +44,12 @@
       - byte_size("João e Maria") -> 13
         - *ã* is represented with 2 bytes
  
+ ## 6. Function Clauses
+
+  - Plugging functions to the ppeline
+  - Using `IO.inspect/1` to write values to the device
+  - One line function definition:
+    - `def f(arg), do: IO.inspect(arg)`
+  - Using `if` statements
+    - Not elixir *idiomatic*
+    - Preffer *pattern matching* and *functions*
