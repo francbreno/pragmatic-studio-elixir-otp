@@ -53,3 +53,7 @@
   - Using `if` statements
     - Not elixir *idiomatic*
     - Preffer *pattern matching* and *functions*
+  - Functions with *same name* and *same number of args* -> *function clauses*
+    - Elixir try each clause until one of them matches the pattern
+      - So **declaration order is important**
+    - 
