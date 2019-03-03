@@ -1,4 +1,5 @@
 defmodule Servy.Handler do
+  require Logger
 
   def handle(request) do
     request
@@ -52,7 +53,10 @@ defmodule Servy.Handler do
 
   def emojify(conv), do: conv
 
-  def log(conv), do: IO.inspect(conv)
+  def log(conv) do 
+    conv |> inspect |> Logger.info
+    conv
+  end
 
   def parse(request) do
     [method, path, _] =
