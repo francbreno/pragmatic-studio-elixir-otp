@@ -94,4 +94,10 @@
       - Obviously, it doesn't matches inexistent keys on the right side
     - It's also possible to bind values on the right side
       - `%{ age: age } = %{ name: "John Doe", age: 18, city: "New York" }`
+  - When pattern matching Strings, you can't use a variable on the left side on the operator `<>`
+    - Solution: **Regular Expressions**
+  - Regular Expressions
+    - `~r{regex}`
+    - `~r` is a *sigil* and `{}` are delimiters to the *regex*
+    - Use the `Regex` module to work with regular expressions
     - 

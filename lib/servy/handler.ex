@@ -3,9 +3,9 @@ defmodule Servy.Handler do
   def handle(request) do
     request
       |> parse
+      |> log
       |> rewrite_path
       |> prettify_url
-      |> log
       |> route
       |> track
       |> emojify
@@ -18,11 +18,19 @@ defmodule Servy.Handler do
 
   def rewrite_path(conv), do: conv
 
-  def prettify_url(%{ path: "/bears?id=" <> id } = conv) do
-    %{ conv | path: "/bears/#{id}" }
+  def prettify_url(%{ path: path } = conv) do
+    regex = ~r{\/(?<resource>\w+)\?id=(?<id>\d+)}
+    captures = Regex.named_captures(regex, path) 
+    prettify_path_captures(conv, captures)
   end
 
   def prettify_url(conv), do: conv
+
+  def prettify_path_captures(conv, %{ "resource" => resource, "id" => id }) do
+    %{ conv | path: "/#{resource}/#{id}" }
+  end
+
+  def prettify_path_captures(conv, _), do: conv
 
   def track(%{ status: 404, path: path } = conv) do
     IO.puts("Warning: #{path} is on the loose!")
