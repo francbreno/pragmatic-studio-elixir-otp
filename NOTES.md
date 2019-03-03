@@ -65,3 +65,20 @@
       - But recommendation is to use
         - Avoid possible ambiguities
       - Pipe operator doesn't allow function calls without parentheses
+
+## 7. Request Params and Status Codes
+
+ - Matching functions with pattern matching
+ - Functions are avalied for the pattern in order
+ - Munctions with the same signature must be together
+ - New map from a previous one changing multiple keys at the same time
+   - `%{ my_map | key_a: 10, key_b: "Test" }`
+ - Private functions
+   - Can only be called in the module that defined it
+   - `defp my_private_funtion(arg), do: ...`
+ - String concatenation: `<>` operator: `"A" <> " Big" <> " Test!"`
+   - Its possible to pattern match a string using the `<>` operator as a String destructor
+     - `"users/" <> id = "users/4357"` -> id = 4357
+     - But:
+       - pet_type <> "/" <> id = "dogs/99" -> Error: *the left argument of <> operator inside a match should be always a literal binary as its size can't be verified*
+     - 
