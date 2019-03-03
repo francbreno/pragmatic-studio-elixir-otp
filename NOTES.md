@@ -56,4 +56,12 @@
   - Functions with *same name* and *same number of args* -> *function clauses*
     - Elixir try each clause until one of them matches the pattern
       - So **declaration order is important**
-    - 
+    - If no match is possible, an error is thrown: `FunctionClauseError`
+  - Function Clauses allow us to write a more declarative code with no conditional structures
+    - More readable
+    - Easy to follow along
+  - Tips:
+    - It's possible to call functions without parentheses, `()`
+      - But recommendation is to use
+        - Avoid possible ambiguities
+      - Pipe operator doesn't allow function calls without parentheses
