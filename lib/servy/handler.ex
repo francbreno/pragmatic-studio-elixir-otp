@@ -4,9 +4,11 @@ defmodule Servy.Handler do
     request
       |> parse
       |> rewrite_path
+      |> prettify_url
       |> log
       |> route
       |> track
+      |> emojify
       |> format_response
   end
 
@@ -16,12 +18,31 @@ defmodule Servy.Handler do
 
   def rewrite_path(conv), do: conv
 
+  def prettify_url(%{ path: "/bears?id=" <> id } = conv) do
+    %{ conv | path: "/bears/#{id}" }
+  end
+
+  def prettify_url(conv), do: conv
+
   def track(%{ status: 404, path: path } = conv) do
     IO.puts("Warning: #{path} is on the loose!")
     conv
   end
 
   def track(conv), do: conv
+
+  def emojify(%{ status: 200, resp_body: resp_body } = conv) do
+    emoji ="😜"
+    
+    emojified_body =
+      resp_body
+      |> String.replace_prefix("", emoji)
+      |> String.replace_suffix("", emoji)
+
+    %{ conv | resp_body: emojified_body }
+  end
+
+  def emojify(conv), do: conv
 
   def log(conv), do: IO.inspect(conv)
 
@@ -124,6 +145,16 @@ IO.puts response
 
 request = """
 DELETE /bears/1 HTTP/1.1
+Host: example.com
+User-Agent: ExampleBrowser/1.0
+Accept: */*
+"""
+
+response = Servy.Handler.handle(request)
+IO.puts response
+
+request = """
+GET /bears?id=10 HTTP/1.1
 Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
