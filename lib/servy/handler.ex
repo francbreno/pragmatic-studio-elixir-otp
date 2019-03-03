@@ -37,6 +37,10 @@ defmodule Servy.Handler do
     %{ conv | status: 200, resp_body: "Bear #{id}" }
   end
 
+  def route(conv, "DELETE", "/bears/" <> id) do
+    %{ conv | status: 204, resp_body: "" }
+  end
+
   def route(conv, "GET", "/wildthings") do
     %{ conv | status: 200, resp_body: "Bears, Lions, Tigers" }
   end
@@ -99,6 +103,16 @@ IO.puts response
 
 request = """
 GET /bears/1 HTTP/1.1
+Host: example.com
+User-Agent: ExampleBrowser/1.0
+Accept: */*
+"""
+
+response = Servy.Handler.handle(request)
+IO.puts response
+
+request = """
+DELETE /bears/1 HTTP/1.1
 Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
