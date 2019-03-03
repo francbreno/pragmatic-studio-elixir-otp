@@ -100,4 +100,5 @@
     - `~r{regex}`
     - `~r` is a *sigil* and `{}` are delimiters to the *regex*
     - Use the `Regex` module to work with regular expressions
-    - 
+  - Using the `Logger` module
+    - Tip: To log data structures like Maps, it's necessary to convert it first into a binary (?: need to confirm)
