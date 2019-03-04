@@ -205,3 +205,14 @@ Defining funtions to "consume" lists
 - It's necessary to define as function clause for the pattern `[]`. Otherwise, an error is thrown
 - **Tail call optimization**
   - recursive call is the last instruction of the function
+
+## 15. Slicing and Dicing with Enum
+
+- Using `Enum` module functions
+  - *Transform* a list in another list
+    - we'll use the `map` function
+  - *Filter* only certain items in a list
+    - we'll use the `filter` function
+  - *Search* for an item in a list
+    - we'll use the`find` function
+- 
