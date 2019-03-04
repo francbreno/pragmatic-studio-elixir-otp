@@ -175,3 +175,25 @@ Grouping functions that have similar concerns
     - It's the same as: `[{:name, "John Doe"}, {:age, 44}, {:city, "Rome"}]`
   - Keyword list are normally used as a list of options
   - Use maps for storing key/value pairs
+
+## 13. Handle POST requests
+
+Creating POST request to create new things
+
+- Destructuring lists
+  - *head* and *tail*
+  - Lists in Elixir are implemented as a series of *linked lists*
+  - `[head | tail] = [1,2,3,4,5]`
+    - head: 1
+    - tail: [2,3,4,5]
+  - It's possible to use the `Kernel` functions `hd` & `tl`
+  - The tail of the final element in a list is an empty list
+    - If the list doesn't end with an empty list its called an *improper list*
+  - Pattern matching using head and tails with an empty list result in an error
+- Decoding a querystring from a request with `URI.decode_query`
+  - Tip: `URI.decode_query` returns a map with keys as strings
+    - Convert those keys to atoms is **dangerous**:
+      - They come from *outside* of our application
+      - Atoms **are not** *garbage collected*
+      - The app can run **out of memory**
+  - 

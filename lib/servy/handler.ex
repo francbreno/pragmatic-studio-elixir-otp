@@ -40,6 +40,11 @@ defmodule Servy.Handler do
     |> handle_file(conv)
   end
 
+  def route(%Conv{ method: "POST", path: "/bears", params: params } = conv) do
+    %{ conv | status: 201,
+              resp_body: "Create a #{params["type"]} bear named #{params["name"]}!" }
+  end
+
   def route(%Conv{ method: "GET", path: "/bears/" <> id } = conv) do 
     %{ conv | status: 200, resp_body: "Bear #{id}" }
   end
@@ -86,6 +91,7 @@ GET /wildthings HTTP/1.1
 Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
+
 """
 
 response = Servy.Handler.handle(request)
@@ -96,6 +102,7 @@ GET /bears HTTP/1.1
 Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
+
 """
 
 response = Servy.Handler.handle(request)
@@ -106,6 +113,7 @@ GET /bigfoot HTTP/1.1
 Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
+
 """
 
 response = Servy.Handler.handle(request)
@@ -116,6 +124,7 @@ GET /bears/1 HTTP/1.1
 Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
+
 """
 
 response = Servy.Handler.handle(request)
@@ -126,6 +135,7 @@ DELETE /bears/1 HTTP/1.1
 Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
+
 """
 
 response = Servy.Handler.handle(request)
@@ -136,6 +146,7 @@ GET /bears?id=10 HTTP/1.1
 Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
+
 """
 
 response = Servy.Handler.handle(request)
@@ -146,6 +157,7 @@ GET /wildlife HTTP/1.1
 Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
+
 """
 
 response = Servy.Handler.handle(request)
@@ -156,6 +168,7 @@ GET /about HTTP/1.1
 Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
+
 """
 
 response = Servy.Handler.handle(request)
@@ -166,6 +179,7 @@ GET /bears/new HTTP/1.1
 Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
+
 """
 
 response = Servy.Handler.handle(request)
@@ -176,6 +190,21 @@ GET /pages/contact HTTP/1.1
 Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
+
+"""
+
+response = Servy.Handler.handle(request)
+IO.puts response
+
+request = """
+POST /bears HTTP/1.1
+Host: example.com
+User-Agent: ExampleBrowser/1.0
+Accept: */*
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 21
+
+name=Baloo&type=Brown
 """
 
 response = Servy.Handler.handle(request)
