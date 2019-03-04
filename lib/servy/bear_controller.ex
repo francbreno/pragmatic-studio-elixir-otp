@@ -8,8 +8,8 @@ defmodule Servy.BearController do
   def index(%Conv{} = conv) do
     items = 
       Wildthings.list_bears()
-      |> Enum.sort(&Bear.order_asc_by_name(&1, &2))
-      |> Enum.map(&bear_item(&1))
+      |> Enum.sort(&Bear.order_asc_by_name/2)
+      |> Enum.map(&bear_item/2)
       |> Enum.join
 
     %{ conv | status: 200, resp_body: "<il>#{items}<li>" }
