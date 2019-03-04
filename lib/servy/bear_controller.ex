@@ -9,7 +9,7 @@ defmodule Servy.BearController do
     items = 
       Wildthings.list_bears()
       |> Enum.sort(&Bear.order_asc_by_name/2)
-      |> Enum.map(&bear_item/2)
+      |> Enum.map(&bear_item/1)
       |> Enum.join
 
     %{ conv | status: 200, resp_body: "<il>#{items}<li>" }
@@ -25,5 +25,9 @@ defmodule Servy.BearController do
   def create(%Conv{} = conv, %{ "type" => type, "name" => name }) do
     %{ conv | status: 201,
               resp_body: "Created a #{type} bear named #{name}!" }
+  end
+
+  def remove(%{} = conv, %{ "id" => id }) do
+    %{ conv | status: 204, resp_body: "" }
   end
 end

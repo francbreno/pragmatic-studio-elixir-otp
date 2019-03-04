@@ -220,4 +220,9 @@ Defining funtions to "consume" lists
   - `&` wraps the named function in an anonymous function
   - args are passed as &1, &2, ...
   - It's a more concise way to declare anonymous functions
-- 
+  - Needs to be used with caution:
+    - Avoid to obscure code
+    - Use when make sense, with parsimony
+    - *Clear code* is better than *Clever code*
+  - We can use the capture operator to capture expressions to generate an anonymous function
+    - `&(&1 * 3)` is the same as `fn(x) -> x * 3 end`
