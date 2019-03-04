@@ -145,4 +145,33 @@ Grouping functions that have similar concerns
   - To: `@pages_path Path.expand("pages", File.cwd!)`
   - **Mix** *always* runs the app from the top-level directory
     - `File.cwd!` will always return the top-level directory
-- 
+
+## 12. Modeling with Structs
+
+ Maps are generic data structures. We need some constraints to represent our app concepts
+
+- *structs* are special kinds of maps, with **fixed keys** and **default values**
+- A *struct* needs to live in it's own module
+- The name of teh struct is the name of the module
+- Only one struct per module is allowed
+- Doesn't allows dynamic access using square brackets
+  - Structs doesn't implement `Access` *Behaviour*
+  - Only dot notation is permited
+- Can be pattern matched where a map is expected (left side is a *map* and right side is a *struct*)
+- But doesn't match when the left side is a *struct* and the right side is a *map*
+- To change a key value we use the same notation used with maps: `%{ my_struct | name: "Testing" }`
+  - If `my_struct` is a *struct*, the operation will return a new *struct*
+- Work with *structs* makes our application more robust
+  - **Type Safety**
+- We can use a *struct* inside another module using the *full module name* or using an `alias`:
+  - `alias ShoppingApp.Accounts.Client`
+    - And inside the module we can use just `Client`
+    - or we could give it another name:
+      - `alias ShoppingApp.Accounts.Client, as: Buyer`
+- Normally you put the functions that operates on a *struct* in the same module
+- **Keyword lists**:
+  - Just *syntactic sugar* using a **list of tuples**
+  - `[ name: "John Doe", age: 44, city: "Rome" ]`
+    - It's the same as: `[{:name, "John Doe"}, {:age, 44}, {:city, "Rome"}]`
+  - Keyword list are normally used as a list of options
+  - Use maps for storing key/value pairs
