@@ -139,3 +139,10 @@ Grouping functions that have similar concerns
 - We need to organize them in appropriate modules
 - importing modules
   - `import`: Imports content into the current namespace
+    - By default, imports module functions and macros
+- Changing module attributes
+  - From: `@pages_path Path.expand("pages", __DIR___)`
+  - To: `@pages_path Path.expand("pages", File.cwd!)`
+  - **Mix** *always* runs the app from the top-level directory
+    - `File.cwd!` will always return the top-level directory
+- 
