@@ -130,4 +130,12 @@ Modules can have attributes
 - personalized modules attributes:
   - `@something "a value"`: defines a module attribute
     - The **value** of the attribute is **set** at **compile time**
-  - 
+
+## 11. Organizing Code
+
+Grouping functions that have similar concerns
+
+- When everything is on the same modules, we start to see clusters of similar functions
+- We need to organize them in appropriate modules
+- importing modules
+  - `import`: Imports content into the current namespace
