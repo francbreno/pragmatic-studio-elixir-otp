@@ -196,4 +196,12 @@ Creating POST request to create new things
       - They come from *outside* of our application
       - Atoms **are not** *garbage collected*
       - The app can run **out of memory**
-  - 
+
+## 14. Recursion
+
+Defining funtions to "consume" lists
+
+- Using the pattern `[head | tail]`
+- It's necessary to define as function clause for the pattern `[]`. Otherwise, an error is thrown
+- **Tail call optimization**
+  - recursive call is the last instruction of the function
