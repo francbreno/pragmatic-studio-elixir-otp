@@ -262,3 +262,37 @@ Defining funtions to "consume" lists
     - `shuffle`: Shuffle the *enumerable* elements  
     - `take`: take the first n elements of a list
     - `chunk_every`: chunk in groups of n elements
+
+## 17. A Peek at Phoenix
+
+Just a sneak pekk at the Phoenix Framework
+
+## 18. Test Automation
+
+How to write automated tests in Elixir
+
+- `mix` generates some king of basic structure for testing
+- Tests are scrips `.exs`, so they don't need to be compiled to execute
+- **ExUnit**: The Elixir built in test framework
+- `ExUnit.Case`: The basic test module
+- test macros:
+  - `test`
+  - `assert`
+  - `refute`
+  - `doctest`
+- How to run the tests:
+  - `mix test` or `mix test path/to/file.exs`
+- **Doctests**:
+  - Elixir docs are writen in **Markdown**
+  - It's useful to include **examples** abount **how to use** the function
+  - By convention, the examples are writen as a **iex** session
+  - The examples are called the *doctests*
+    - The are expetations about how the code needs to work
+  - `doctest` is a *macro* that looks for doctests ina module. If it founds any, it creates some tests for them
+  - On the test report, they are accounted as *doctests*
+- Tip: Speeding Up Tests
+  - Execute tests concurrently
+    - `use ExUnit.Case, async: true`
+    - Caution: Beware that you won't be able to use this trick if a test case accesses shared state or resources with another test cases
+- Tip: Organizing doctests
+  - Aggregate all doctests into a new test case 
