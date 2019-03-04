@@ -120,4 +120,14 @@ Reading files
       - To read a file on a path relative to another path
   - `__DIR__`: Absolute path of the directory of the current file
     - `join`: joina list of paths into a new path usign the proper file separator
+  
+## 10. Module Attributes
+
+Modules can have attributes
+
+- `@moduledoc`: Documents the module
+- `@doc`: Documents a function
+- personalized modules attributes:
+  - `@something "a value"`: defines a module attribute
+    - The **value** of the attribute is **set** at **compile time**
   - 
