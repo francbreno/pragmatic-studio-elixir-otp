@@ -214,7 +214,9 @@ Defining funtions to "consume" lists
   - *Filter* only certain items in a list
     - we'll use the `filter` function
   - *Search* for an item in a list
-    - we'll use the`find` function
+    - we'll use the `find` function
+  - *Reduce* a list to a single value
+    - we'll use the `reduce` function
 - Capture Operator: `&`
   - A shortcut for defining anonymous functions
   - `&` wraps the named function in an anonymous function
@@ -226,3 +228,37 @@ Defining funtions to "consume" lists
     - *Clear code* is better than *Clever code*
   - We can use the capture operator to capture expressions to generate an anonymous function
     - `&(&1 * 3)` is the same as `fn(x) -> x * 3 end`
+
+## 16. Comprehensions
+
+- **.eex** extensions: embedded elixir
+- The `EEx` module
+  - `eval_file` function: evaluates the file (filename) using *bindings*
+- The *Generator* operator: `<-`:
+  - `for x <- [1,2,3], do: x * 2`
+  - A sucint way to transform a list in another one
+- A comprehension can receive more than one generator
+  - `for size <- ["S", "M", "L"], color <- [:red, :green], do: {size, color} `
+  - Works as a nested loop
+- Filtering expressions:
+  - `for {name, :dog} <- [{"Rufus", :dog}, {"Max", :cat}, {"Lester", :dog}], do: name`
+  - or using *filter expressions*
+    - `for {name, pet_choice} <- [{"Rufus", :dog}, {"Max", :cat}, {"Lester", :dog}], pet_choice: :dog, do: name`
+    - a filter can be any *predicate*:
+      - `for {name, pet_choice} <- [{"Rufus", :dog}, {"Max", :cat}, {"Lester", :dog}], its_a_dog?(pet_choice), do: name`
+- Default parameters:
+  - `def sum(a, b \\ 10), do: a + b`
+- Atomize Keys:
+  - It's more confortable to work with atoms when dealing with maps keys
+  - how to convert a string key into a atom
+  - Using `Map.new` function:
+    - `Map.new(original_map, fn({k, v}) -> {String.to_atom(k), v} end)`
+  - Using a *Comprehension*:
+    - observe the `:into` option
+    - `for {k, v} <- original_map, into: %{} do: {String.to_atom(k), v}`
+  - Some others `Enum` functions
+    - `random`: returns a random element
+    - `take_random`: take a group of n random elements
+    - `shuffle`: Shuffle the *enumerable* elements  
+    - `take`: take the first n elements of a list
+    - `chunk_every`: chunk in groups of n elements
