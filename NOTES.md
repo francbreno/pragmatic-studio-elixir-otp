@@ -215,4 +215,9 @@ Defining funtions to "consume" lists
     - we'll use the `filter` function
   - *Search* for an item in a list
     - we'll use the`find` function
+- Capture Operator: `&`
+  - A shortcut for defining anonymous functions
+  - `&` wraps the named function in an anonymous function
+  - args are passed as &1, &2, ...
+  - It's a more concise way to declare anonymous functions
 - 
