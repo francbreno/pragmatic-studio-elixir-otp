@@ -296,3 +296,16 @@ How to write automated tests in Elixir
     - Caution: Beware that you won't be able to use this trick if a test case accesses shared state or resources with another test cases
 - Tip: Organizing doctests
   - Aggregate all doctests into a new test case 
+
+## 19. Rendering JSON
+
+Using an external JSON library (**Poison**) to parse render JSON data
+
+- Using the [https://hex.pm](Hex) package manager
+- Add dependencies in the `deps` function inside
+- the `mix.ex` file
+- `mix deps`: list all the dependencies
+- `mix deps.get`: download pending dependencies
+- All the dependencies are inside the directory *deps*
+- Tip: To see the dependencies version patterns, use `h Version` in an `iex` session
+- 

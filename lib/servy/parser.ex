@@ -17,8 +17,6 @@ defmodule Servy.Parser do
       path: path,
       params: params,
       headers: headers,
-      resp_body: "",
-      status: nil,
     }
   end
 
@@ -42,6 +40,10 @@ defmodule Servy.Parser do
   """
   def parse_params("application/x-www-form-urlencoded", params_string) do
     params_string |> String.trim |> URI.decode_query
+  end
+
+  def parse_params("application/json", json_body) do
+    Poison.Parser.parse!(json_body, %{})
   end
 
   def parse_params(_, _), do: %{}

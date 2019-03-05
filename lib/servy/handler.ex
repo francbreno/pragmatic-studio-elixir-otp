@@ -14,6 +14,7 @@ defmodule Servy.Handler do
 
   import Servy.Parser, only: [parse: 1]
   import Servy.FileHandler, only: [handle_file: 2] 
+  import Servy.Conv, only: [put_content_length: 1]
 
   @pages_path Path.expand("../../pages", __DIR__)
 
@@ -27,11 +28,20 @@ defmodule Servy.Handler do
       |> route
       |> track
       # |> emojify
+      |> put_content_length
       |> format_response
   end
 
   def route(%Conv{ method: "GET", path: "/bears" } = conv) do 
     BearController.index(conv)
+  end
+
+  def route(%Conv{ method: "GET", path: "/api/bears" } = conv) do 
+    Servy.Api.BearController.index(conv)
+  end
+
+  def route(%Conv{ method: "POST", path: "/api/bears", params: params } = conv) do 
+    Servy.Api.BearController.create(conv, params)
   end
 
   def route(%Conv{ method: "GET", path: "/bears/new" } = conv) do
@@ -66,6 +76,20 @@ defmodule Servy.Handler do
     |> handle_file(conv)
   end
 
+  def route(%Conv{method: "GET", path: "/pages/faq"} = conv) do
+    @pages_path
+    |> Path.join("faq.md")
+    |> File.read
+    |> handle_file(conv)
+    |> markdown_to_html
+  end
+  
+  def markdown_to_html(%Conv{status: 200} = conv) do
+    %{ conv | resp_body: Earmark.as_html!(conv.resp_body) }
+  end
+  
+  def markdown_to_html(%Conv{} = conv), do: conv
+
   def route(%Conv{ method: "GET", path: "/pages/" <> file_name } = conv) do
     @pages_path
     |> Path.join("#{file_name}.html")
@@ -77,13 +101,14 @@ defmodule Servy.Handler do
     %{ conv | status: 404, resp_body: "No #{path} here!" }
   end
 
-  def format_response(%Conv{} = conv) do
+  def format_response(%Conv{ resp_body: resp_body, resp_headers: resp_headers } = conv) do
     """
     HTTP/1.1 #{Conv.full_status(conv)}\r
-    Content-Type: text/html\r
-    Content-Length: #{byte_size(conv.resp_body)}\r
+    Content-Type: #{resp_headers["Content-Type"]}\r
+    Content-Length: #{resp_headers["Content-Length"]}\r
     \r
-    #{conv.resp_body}
+    #{resp_body}
     """
   end
+
 end
