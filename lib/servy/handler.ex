@@ -84,7 +84,7 @@ defmodule Servy.Handler do
     |> markdown_to_html
   end
   
-  def markdown_to_html(%Conv{status: 200} = conv) do
+  def markdown_to_html(%Conv{ status: 200 } = conv) do
     %{ conv | resp_body: Earmark.as_html!(conv.resp_body) }
   end
   

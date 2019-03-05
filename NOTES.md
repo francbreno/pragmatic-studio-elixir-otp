@@ -308,4 +308,20 @@ Using an external JSON library (**Poison**) to parse render JSON data
 - `mix deps.get`: download pending dependencies
 - All the dependencies are inside the directory *deps*
 - Tip: To see the dependencies version patterns, use `h Version` in an `iex` session
+
+## 20. Web Server Sockets
+
+Time to create a real server
+
+- How *Client - Server* systems works
+  - *listen socket*: to accept connection requests
+  - *client socket*: 
+- *Socket* Layer and *Request Handler* Layer
+  - **Socker Layer**: Communicating with HTTP Clients
+  - **Request Handler Layer**: Transforms the request string into a response string
+- Using **Erlang** socket library `gen_tcp`
+- **Erlang** rich library: If you need something that's not available in Elixir, look for it in the Erlang libraries
+- Starting the server using `mix`: `mix run -e "Servy.HttpServer.start(4000)"`
 - 
+  - 
+
