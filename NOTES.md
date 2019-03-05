@@ -322,6 +322,23 @@ Time to create a real server
 - Using **Erlang** socket library `gen_tcp`
 - **Erlang** rich library: If you need something that's not available in Elixir, look for it in the Erlang libraries
 - Starting the server using `mix`: `mix run -e "Servy.HttpServer.start(4000)"`
-- 
-  - 
+  
+## 21. Concurrent, Isolated Processes
+  - `spawn` function: executes some code on a different process
+    - `spawn(fn -> IO.puts "I'm Running... not for too long" end)`
+      - Returns the `pid` of the process
+  - MFA (Module, Function, Args)
+    - `spawn(MyApp.Server, :start, [8080])`
+  - Functions in Elixir are Closures
+    - Values are *deep copied* since **process shares no memory** inside the **BEAM VM**
+  - `self` function: returns the **current process** `pid`
+    - It's **not a string**. It's **a data structure**
+  - Getting System Info
+    - `Process` module
+      - `Process.list`
+    - `:erlang` module
+      - `:erlang.system_info(:process_count)`: returns the number of processes runninng at the moment. Same as `Process.list |> Enum.count`
+    - `:observer` module
+      - `:observer.start`: A *GUI interface* to inspect the current state of the BEAM VM
+  - In case of an error in a spawned process, the parent process stay running
 

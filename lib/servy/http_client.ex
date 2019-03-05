@@ -1,14 +1,14 @@
 defmodule Servy.HttpClient do
 
-  def client() do
+  def send(request, port) do
     someHostInNet = 'localhost' # to make it runnable on one machine
     {:ok, sock} = :gen_tcp.connect(
       someHostInNet,
-      4000,
+      port,
       [:binary, packet: :raw, active: false]
     )
-    :ok = :gen_tcp.send(sock, create_fake_request)
-    response = :gen_tcp.recv(sock, 0)
+    :ok = :gen_tcp.send(sock, request)
+    {:ok, response} = :gen_tcp.recv(sock, 0)
     :ok = :gen_tcp.close(sock)
 
     response

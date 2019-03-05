@@ -22,7 +22,7 @@ defmodule Servy.Handler do
   def handle(request) do
     request
       |> parse
-      |> log(Mix.env)
+      #|> log(Mix.env)
       |> rewrite_path
       |> prettify_url
       |> route
@@ -30,6 +30,16 @@ defmodule Servy.Handler do
       # |> emojify
       |> put_content_length
       |> format_response
+  end
+
+  def route(%Conv{ method: "GET", path: "/kaboom" }) do
+    raise "Kaboom!"
+  end
+
+  def route(%Conv{ method: "GET", path: "/hibernate/" <> time } = conv) do
+    time |> String.to_integer |> :timer.sleep
+
+    %{ conv | status: 200, resp_body: "Awake!" }
   end
 
   def route(%Conv{ method: "GET", path: "/bears" } = conv) do 
