@@ -403,4 +403,19 @@ Time to create a real server
     - When you need to run a function *asynchronously* in a short-live process
   - Making code more expressive using `:timer.seconds`
     - `Task.await(task, :timer.seconds(7))`
-  - 
+  
+## 24. Stateful Server Processes
+
+- **Modules** can't hold state
+- But **Processes** can
+  - Executing the function in a *recursive loop*
+  - The *inicial state* e providade as a *function arg*
+  - Processes can handle different messages
+    - Just pattern match each one and handle accordingly
+- Sending a message is **always** an async operation
+- Abstract the Server interaction inside a module
+- Registering a process under an arbitrary name
+  - When you only need one process executing
+  - Avoids the necessity to send the pid on all the server operations
+  - The name must be an `atom`
+  - `Process.register(pid, :server_name)`
