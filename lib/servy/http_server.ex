@@ -3,7 +3,7 @@ defmodule Servy.HttpServer do
   @doc """
   Starts the server on the given `port` of localhost.
   """
-  def start(port) when is_integer(port) and port > 1023 do
+  def start(port \\ 4000) when is_integer(port) and port > 1023 do
 
     # Creates a socket to listen for client connections.
     # `listen_socket` is bound to the listening socket.

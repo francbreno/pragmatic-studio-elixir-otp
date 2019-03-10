@@ -327,6 +327,8 @@ Time to create a real server
   - `spawn` function: executes some code on a different process
     - `spawn(fn -> IO.puts "I'm Running... not for too long" end)`
       - Returns the `pid` of the process
+      - The `pid` is a process identifier. It's unique for each process
+        - It's an address to send messages toa `process`
   - MFA (Module, Function, Args)
     - `spawn(MyApp.Server, :start, [8080])`
   - Functions in Elixir are Closures
@@ -341,4 +343,35 @@ Time to create a real server
     - `:observer` module
       - `:observer.start`: A *GUI interface* to inspect the current state of the BEAM VM
   - In case of an error in a spawned process, the parent process stay running
+  - Elixir and Erlang process are prefixed with the name `Elixir.`
 
+## 22. Sending and Receiving Messages
+
+  - *Parent* and *Child* Processes
+    - How they communicate with each other?
+      - As any process do: **Sending asynchronous messages**
+  - **Processes mailboxes**:
+    - Each process has a mailbox to receive other processes messages
+    - Only one message is read 
+    - The mail box is a *queue*
+    - The *mailbox address* is the `pid` of the process
+    - How to send a message:
+      - using the function `send`
+        - `send(destiny_pid, message)`
+        - A *message* can be any elixir *term*
+          - `send(pid, "hi there!")` 
+          - `send(pid, {:response, "yes, we can be friends"})`
+          - `send(pid, {:ok, %Product{ name: "Laptop", price: 900.00, maker: "Fantasy Tech" }})`
+    - An how a process read messages from his mailbox?
+      - Using a `receive do` block
+      - It's like a `case` expression
+      - We pattern match the message content
+      - `receive do` is *blocking*
+  - It's possible to see all the messages in the mailbox without consuming them
+    - `Process.info(pid, :messages)`
+  - Messages stay in the queue until they are *received* or the process ends
+  - The **Actor Model** of Concurrency
+    - Each process is an *actor*
+      - Isolated
+      - Independent
+      - Doesn't share anything
