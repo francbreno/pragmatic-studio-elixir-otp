@@ -1,0 +1,12 @@
+<h1>Sensors</h1>
+
+<h2>Snapshots</h2>
+
+<ul>
+  <%= for snapshot <- snapshots do %>
+    <li><img src="<%= snapshot %>" alt="snapshot" /></li>
+  <% end %>
+</ul>
+
+<h2>Where is BigFoot?</h2>
+<%= inspect where_is_bigfoot %>

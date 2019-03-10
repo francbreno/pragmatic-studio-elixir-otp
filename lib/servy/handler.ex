@@ -17,6 +17,7 @@ defmodule Servy.Handler do
   import Servy.Parser, only: [parse: 1]
   import Servy.FileHandler, only: [handle_file: 2] 
   import Servy.Conv, only: [put_content_length: 1]
+  import Servy.View, only: [render: 3]
 
   @pages_path Path.expand("../../pages", __DIR__)
 
@@ -44,7 +45,7 @@ defmodule Servy.Handler do
     
     where_is_bigfoot = Task.await(task)
   
-    %{ conv | status: 200, resp_body: inspect {snapshots, where_is_bigfoot}}
+    render(conv, "sensors.ex", snapshots: snapshots, where_is_bigfoot: where_is_bigfoot)
   end
 
   def route(%Conv{ method: "GET", path: "/kaboom" }) do

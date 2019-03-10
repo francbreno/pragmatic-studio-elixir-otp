@@ -71,5 +71,30 @@ defmodule HttpServerTest do
 
   end
 
+  test "concurrent requests using Task module" do
+    start_server()
+    urls = [
+      "http://localhost:4000/wildthings",
+      "http://localhost:4000/bears",
+      "http://localhost:4000/bears/1",
+      "http://localhost:4000/wildlife",
+      "http://localhost:4000/api/bears"
+    ]
+    |> Enum.map(fn url -> Task.async(HTTPoison, :get, [url]) end)
+    |> Enum.map(&Task.await/1)
+    |> Enum.map(fn response -> case response
+      do
+        {:ok, %HTTPoison.Response{status_code: 200}} ->
+          assert true
+          
+        {:ok, %HTTPoison.Response{body: body}} ->
+          assert body == "Bears, Lions, Tigers"
+
+        {:error, _} -> 
+          assert false
+      end
+    end)
+  end
+
   defp start_server(), do: spawn(HttpServer, :start, [4000])
 end

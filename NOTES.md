@@ -375,3 +375,32 @@ Time to create a real server
       - Isolated
       - Independent
       - Doesn't share anything
+
+## 23. Asynchronous Tasks
+
+- `Task` module
+  - Execute async operations
+  - functions:
+    - `async`: async execution of a function returning the `pid` on where the function is running
+      - It doesn't returns a pid, but a `Task` *struct*
+    - `await`: has a `receive` block to receive the response message from a task execution
+  - The `Task` *struct* has all the data necessary to deal sending and receiving async tasks, like the parent pid, the task process pid, response struct, etc
+  - Abstract operations, simplifying code
+  - Operations can take too long to respond
+    - It's possible to define an `after` expression inside a `receive` expression
+    - So, it's also possible to define a timeout in a `Task`
+      - In fact, `Task` defines a **default timeout** of **5 seconds**
+      - That value can be overriden passing **another value**, **in milliseconds**, to the `await` function
+        - `Task.await(task, 10000)`
+        - It's possible to wait indefinitely passing the atom `:infinity`
+        - `Task.await(task, :infinity)`
+  - Checking if a long-running task has finished
+    - `await` can only be called **once** for any task
+    - Use the function `yield` from the `Task` module
+    - `yield` will wait for the timeout. If the response has arrived, it will responds with `{:ok, response}`. Otherwise, it will responds with `nil`
+    - You can shutdown a task using the function `shutdown` from the module `Task`. It avoids long running tasks to wait for too long
+  - **When to use?**:
+    - When you need to run a function *asynchronously* in a short-live process
+  - Making code more expressive using `:timer.seconds`
+    - `Task.await(task, :timer.seconds(7))`
+  - 
