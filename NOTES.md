@@ -447,4 +447,7 @@ Time to create a real server
       - It can't run computations or asynchronous operations
     - Because of those things, `Agents` are not used very often in the "real world"
       - A *more complete abstration* elixir offers is a **GenServer**
-    - 
+  
+## 25. Refactoring Toward GenServer
+
+- 
