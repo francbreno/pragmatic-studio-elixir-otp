@@ -419,3 +419,32 @@ Time to create a real server
   - Avoids the necessity to send the pid on all the server operations
   - The name must be an `atom`
   - `Process.register(pid, :server_name)`
+  - It's possible to *unregister*
+    - `Process.unregister(:server_name)`
+- How to deal with invalid/unexpected messages?
+  - If a message is not handled on the `receive` expression it will stay hanging around the process mailbox
+    - It can be problematic
+    - Processing can be slow
+    - mailbox might get full of invalid messages
+    - Process can stop dealing with valid messages
+  - The solution is to use a pattern to match all the other messages on the `receive` expression
+    - They can be simply discarded
+- Message handling is **always** serialized
+  - So, the server process is a *synchronization point* in the application
+  - Preserves the integrity of the state
+- If you need the server pid when you define it with a unique name
+  - `Process.whereis(:server_name)`
+- **Agents**
+  - A simple *wrapper* around a server process
+    - to store state
+    - to offer a simple API to access the state
+  - No need to define a module
+  - No need to write a `receive` expression
+  - No need to define a recursive loop
+  - `Agents` are great when you only need a process to store state
+    - but:
+      - It's all an `Agent` can do
+      - It can't run computations or asynchronous operations
+    - Because of those things, `Agents` are not used very often in the "real world"
+      - A *more complete abstration* elixir offers is a **GenServer**
+    - 

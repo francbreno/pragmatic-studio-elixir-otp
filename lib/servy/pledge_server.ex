@@ -1,13 +1,42 @@
 defmodule Servy.PledgeServer do
 
-  @name :pledge_server
+  @name __MODULE__
 
-  def start do
+  # Client Interface
+
+  def start(initial_state \\ []) do
     IO.puts "Starting the pledge server..."
-    pid = spawn(__MODULE__, :listen_loop, [[]])
-    Process.register(pid, @name)
-    pid
+    
+    case Process.whereis(@name) do
+      nil ->
+        pid = spawn(@name, :listen_loop, [initial_state])
+        Process.register(pid, @name)
+        pid
+      existing_pid ->
+        existing_pid
+    end
   end
+
+  def create_pledge(name, amount) do
+    send @name, {self(), :create_pledge, name, amount}
+
+    receive do {:response, status} -> status end
+  end
+
+  def recent_pledges do
+    send @name, {self(), :recent_pledges}
+
+    # blocking
+    receive do {:response, pledges} -> IO.inspect pledges end
+  end
+
+  def total_pledged do
+    send @name, {self(), :total_pledged}
+    
+    receive do {:response, total} -> total end
+  end
+
+  # Server Interface
 
   def listen_loop(state) do
     receive do
@@ -20,20 +49,13 @@ defmodule Servy.PledgeServer do
       {sender, :recent_pledges} ->
         send(sender, {:response, state})
         listen_loop(state)
+      {sender, :total_pledged} ->
+        total = Enum.map(state, &elem(&1, 1)) |> Enum.sum
+        send sender, {:response, total}
+        listen_loop(state)
+      unexpected ->
+        IO.puts "Unexpected message: #{inspect unexpected}"
     end
-  end
-  
-  def create_pledge(name, amount) do
-    send @name, {self(), :create_pledge, name, amount}
-
-    receive do {:response, status} -> status end
-  end
-
-  def recent_pledges do
-    send @name, {self(), :recent_pledges}
-
-    # blocking
-    receive do {:response, pledges} -> IO.inspect pledges end
   end
 
   defp send_pledge_to_service(_name, _amount) do

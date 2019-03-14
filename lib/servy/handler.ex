@@ -6,6 +6,7 @@ defmodule Servy.Handler do
   alias Servy.VideoCam
   alias Servy.Tracker
   alias Servy.PledgeController
+  alias Servy.FourOhFourCounter
 
   import Servy.Plugins, only: [
     rewrite_path: 1, 
@@ -36,12 +37,21 @@ defmodule Servy.Handler do
       |> format_response
   end
 
+  def route(%Conv{ method: "GET", path: "/404s" } = conv) do
+    all_404s = FourOhFourCounter.get_counts
+    %{ conv | status: 200, resp_body: inspect all_404s }
+  end
+
   def route(%Conv{ method: "POST", path: "/pledges" } = conv) do
     PledgeController.create(conv, conv.params)
   end
 
   def route(%Conv{ method: "GET", path: "/pledges" } = conv) do
     PledgeController.index(conv)
+  end
+
+  def route(%Conv{ method: "GET", path: "/pledges/new" } = conv) do
+    PledgeController.new(conv)
   end
 
   def route(%Conv{ method: "GET", path: "/snapshots" } = conv) do
