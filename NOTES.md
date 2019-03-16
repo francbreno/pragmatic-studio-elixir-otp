@@ -561,3 +561,35 @@ Time to create a real server
         - `Process.monitor` returns a *reference*. It can stop monitoring the process with the function `Process.demonitor(reference)`
       - Tasks and links
         - Processes spwaned by a Task are **automatically linked** to the calling process
+
+## 29. Fault Recovery with OTP Supervisors
+  
+- **Supervisors**
+    - OTP *Behavior*
+    - Are *special types* of **GenServers**
+    - starts, monitors and "restart" processes under *supervision*
+    - Supervised processes are called *children*
+  - Restart strategies
+    - :one_for_all
+      - if on child process dies, all the other children are terminated by the supervisor and new processes are spawned to replace them
+      - Use it when child processes are dependent on each other
+    - :one_for_one
+      - if a child process die, the supervisor spawn a new process to replace the terminated one. All the other children stay untouched
+      - Use it when children are independent on each other
+  - A supervisor is a process like any other
+  - `Supervisor` **doesn't have** a `start` function, just a `start_link` function
+  - Supervisor behavior expects a `init` function`to be implemented
+  - It's on the `init` function that we tell the Supervisor wich process it needs to start and supervise as it's children
+    - We need to call the `Supervision.init` function passing a list of modules to spawn process for supervision and the *strategy* to be used.
+  - The `Supervisor` behavior assumes some conventions:
+    - We a process child starts it needs to be linked to the supervisor, so `Supervisor` assumes that the modules to be used to start child processes need to define a function `start_link` receiving an arg
+  - We can list all the supervised processes from a supervisor calling `Supervisor.which_children(pid)`
+  - We can also count the children calling `Supervisor.count_children(pid)`, returning a *map* with the counting of each kind of process under supervision
+  - If you need to pass an arg to a child when starting the supervision, you need to pass a *tuple* instead of a module in the children list
+    - {ModuleName, arg_value}
+    - the arg can be any Elixir *term*
+  - **Child Specs**
+    - The GenServer behavior defines a function called `child_spec`
+    - By default, supervisors call this function passing an empty list as an arg when initializing the chidren processes
+      - This function returns a *child specification*, an map with information about how the supervisors should start a supervise the child processes from this GenServer
+    - We can *override* default child spec values from GenServers implementing a `child_spec` function or passing args on the `use` expression 
