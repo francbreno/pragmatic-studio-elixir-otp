@@ -22,3 +22,5 @@ erl_crash.dump
 # Ignore package tarball (built via "mix hex.build").
 servy-*.tar
 
+# Ingore Dialyzer files. Necessary for the ElixirLS (Elixir Language Server)
+.elixir_ls/

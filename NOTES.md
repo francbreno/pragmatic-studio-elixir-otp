@@ -450,4 +450,65 @@ Time to create a real server
   
 ## 25. Refactoring Toward GenServer
 
+- Just code changes
+
+## 26. OTP GenServer
+
+- OTP Behaviours
+  - Encapsulation of *design patterns*
+  - Conventions
+- GenServer
+  - an *OTP Behaviour*
+  - Long duration Processes
+  - expect **6 callback functions**
+    - minimum: `handle_call` &/or `handle_cast`
+  - The `use` macro
+    - Injects **default implementations** from the *callback module*
+    - `use GenServer`
+  - `GenServer` has some specs
+    - handle_cast return: `{:noreply, new_state}`
+      - `:noreply`: the most common
+    - handle_cast return: `{:reply, response, new_state}`
+  - GenServer state
+    - If state is getting more complex
+      - Encapsulate it into a *struct*
+  - `call` & `cast`
+    - Use `call` when you need to execute the operation in a *synchronous way* to get back *response*
+    - Use `cast` when you need to execute the operation *asynchronous* and you don't want an immediate answer
+  - `init` callback
+    - Used to initialize the state
+      - ex.: Fetch some data to put in the state
+    -  it's a *blocking* operation
+       -  start will block and wait for init to comoplete
+       -  It's necessary caution when performing operations on `init`
+       -  Server process can only be used after being successfully initialized
+  - `handle_info`
+    - handles messages not sent using `call` or `cast`
+      - messages sent using `send`
+    - It has other practical uses
+  - `Task`, `Agent` or `GenServer`?
+    - To perform a one-off computation or query asynchronously -> `Task`
+    - To simply hold a state in a process -> `Agent`
+    - For a long running process, storing state a performing operations -> `GenServer`
+    - To serialize access to a shared resource or service used by multiple concurrent processes -> `GenServer`
+    - For background operations to be executed periodically -> `GenServer`
+    - You can start with a `Task` or an `Agent` and, if necessary, migrate to a `GenServer`
+  - How to **stop the server**?
+    - Handling a message returning a tuple with the following pattern: `{:stop, reason, new_state}`
+  - Initialization
+    - typically `init` returns {:ok, state}
+    - If something goes wrong, you can return `{:stop, reason}`, so start will return `{:error, reason}`
+  - `terminate(reason, state)` callback
+    - to execute some *cleanup code* after handling a message returning a *stop* tuple
+    - In some cases, `terminate` is not called
+      - So, it's not a reliable way to clean up after a process. Use a `Supervisor`, instead
+  - `code_change` callback
+    - for hot code-swapping
+    - normally **you doesn't need to implement** this callback
+  - Call Timeouts
+    - *default* timeout value: 5000
+    - can be set as the third argument to `call`
+      - `GenServer.call(@name, :last_notifications, 3000)`
+  - Debuging and Tracing
+    - The `sys` module from **Erlang**
 - 

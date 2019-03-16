@@ -9,4 +9,4 @@
 </ul>
 
 <h2>Where is BigFoot?</h2>
-<%= inspect where_is_bigfoot %>
+<%= inspect location %>
