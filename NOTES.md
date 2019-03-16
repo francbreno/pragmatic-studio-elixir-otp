@@ -46,7 +46,7 @@
  
  ## 6. Function Clauses
 
-  - Plugging functions to the ppeline
+  - Plugging functions to the pipeline
   - Using `IO.inspect/1` to write values to the device
   - One line function definition:
     - `def f(arg), do: IO.inspect(arg)`
@@ -265,7 +265,7 @@ Defining funtions to "consume" lists
 
 ## 17. A Peek at Phoenix
 
-Just a sneak pekk at the Phoenix Framework
+Just a sneak peek at the Phoenix Framework
 
 ## 18. Test Automation
 
@@ -511,4 +511,53 @@ Time to create a real server
       - `GenServer.call(@name, :last_notifications, 3000)`
   - Debuging and Tracing
     - The `sys` module from **Erlang**
-- 
+
+## 27. Another GenServer
+
+- Code development only
+
+## 28. Linking Processes
+
+- Making processes resilient to failures
+  - We need something to *start*, *monitor* and *start a new process* to replace he failured one.
+  - **OTP Supervisor Behavior**
+    - For *OTP compliant* processes only
+  - For *non OTP* Processes
+    - We need an *OTP compliant* monitor process like a `GenServer`
+      - And `link` the processes
+  - Monitoring processes
+    - We need to `link` them together
+      - `Process.link(pid)`
+      - or directly  when spawning the process
+        - `spawn_link`
+          - `spawn` and `link` are executed in one operation
+          - It avoids potencial *race conditions*
+      - Listing a process links
+        - `Process.info(pid, :links)`
+      - Linking is *bidirectional*
+      - And their fates are tied together
+        - Image processes *a* and *b* are linked
+        - if we kill the process *a*, process *b* is also killed and vice-versa
+    - Once death, *a process cannot be respawned*
+      - we need to start a new one
+    - Trapping exits
+      - To catch/trap an *exit signal* from a linked process
+        - `Process.flag(:trap_exit, true)`
+        - If process *a* traps exit and is linked to a process *b*, if *b* exits *a* doesn't exists anymore
+        - The process that traps the exit transforms the exit signal into a message that needs to be handled in a `handle_info` function
+          - the message pattern: `{:EXIT, #PID<>, kill_reason}`
+      - Normal vs Abnormal process termination
+        - normal termination
+          - reason is **always** `:normal`
+            - the **linked process doesn't terminate**
+        - abnormal termination
+          - anything but `:normal`
+            - the **linked process terminates** with the **same reason** 
+              - Unless the process is trapping exit
+      - Monitoring process
+        - It's possible to be aware of a process termination without tying their fates together
+        - Instead of linking the processes using `Process.link(pid)`, we just monitor the process with `Processo.monitor(pid)`
+        - Unlike links, monitors are *unidirectional*
+        - `Process.monitor` returns a *reference*. It can stop monitoring the process with the function `Process.demonitor(reference)`
+      - Tasks and links
+        - Processes spwaned by a Task are **automatically linked** to the calling process
