@@ -563,7 +563,7 @@ Time to create a real server
         - Processes spwaned by a Task are **automatically linked** to the calling process
 
 ## 29. Fault Recovery with OTP Supervisors
-  
+
 - **Supervisors**
     - OTP *Behavior*
     - Are *special types* of **GenServers**
@@ -593,3 +593,12 @@ Time to create a real server
     - By default, supervisors call this function passing an empty list as an arg when initializing the chidren processes
       - This function returns a *child specification*, an map with information about how the supervisors should start a supervise the child processes from this GenServer
     - We can *override* default child spec values from GenServers implementing a `child_spec` function or passing args on the `use` expression 
+  - Supervising other supervisors
+    - Supervisors can supervises other supervisors too
+    - It creates a **supervision tree**
+      - A hierarchy of supervisors and *workers*
+        -  workers are processes other than supervisors
+    - **Supervisors traps exits signals**
+      - So the exit signals only propagate to the immediate supervisor
+    - **Errors are isolated to specific subtrees**
+

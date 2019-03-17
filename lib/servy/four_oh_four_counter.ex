@@ -5,8 +5,8 @@ defmodule Servy.FourOhFourCounter do
 
   # Client API
 
-  def start(initial_state \\ %{}) do
-    GenServer.start(@name, initial_state, name: @name)
+  def start_link(initial_state \\ %{}) do
+    GenServer.start_link(@name, initial_state, name: @name)
   end
 
   def bump_count(path) when is_binary(path) do
